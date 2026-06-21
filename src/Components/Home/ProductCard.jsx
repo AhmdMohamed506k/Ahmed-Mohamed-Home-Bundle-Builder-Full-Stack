@@ -2,15 +2,16 @@ import React from 'react';
 import { customAlphabet, nanoid } from 'nanoid';
 
 
-const ProductCard = ({ product, handleAddToCart, cart }) => {
+const ProductCard = ({ product, handleAddToCart, handleUpdateQuantity, cartData }) => {
 
   const LocalSession = localStorage.getItem("SessionId")
 
   function GenerateCode() {
+    const sessionId = localStorage.getItem("SessionId");
     const alphabet = 'ABCDEF1234567890';
     const MyAlphabet = customAlphabet(alphabet, 10);
     const uniqueId = MyAlphabet()
-    return uniqueId
+    return sessionId ? sessionId : uniqueId
   }
 
 
@@ -19,6 +20,10 @@ const ProductCard = ({ product, handleAddToCart, cart }) => {
 
 
 
+
+
+  console.log(product);
+  
 
 
 
@@ -36,7 +41,7 @@ const ProductCard = ({ product, handleAddToCart, cart }) => {
       <div className='w-40'>
         {product.HasOffer && (
           <span className="self-start bg-[#4E2FD2] text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2">
-            Save {product.discount}%
+            Save {product.TotalOffer}%
           </span>
         )}
 
@@ -45,13 +50,14 @@ const ProductCard = ({ product, handleAddToCart, cart }) => {
       </div>
 
 
-      <div  className=' xl:w-[95%] w-full'>
+      <div className=' xl:w-[95%] w-full'>
         <h3 className="text-lg xl:text-sm  font-semibold text-gray-900 text-center mb-1 xl:text-start xl:mt-1">{product.name}</h3>
         <p className="text-sm xl:text-[10px] xl:mx-auto text-gray-500 text-center mb-4  xl:text-start leading-relaxed">
           {product.description}
         </p>
 
 
+     
         <div className="flex gap-2 mb-6 xl:mb-2 flex-wrap justify-center xl:justify-start">
           {product.HasVariants &&
 
@@ -78,9 +84,10 @@ const ProductCard = ({ product, handleAddToCart, cart }) => {
 
 
           <div className="flex items-center gap-2 bg-gray-50 rounded-lg p-1 border border-gray-200">
-            <button className={cart == null ? "w-8 h-8 flex items-center justify-center font-bold text-gray-600 bg-gray-200 hover:bg-gray-200  disabled  rounded transition-colors" : "w-8 h-8 flex items-center justify-center font-bold text-gray-600 hover:bg-gray-200 rounded transition-colors"}>-</button>
+            <button disabled={!product.quantity || product.quantity <= 0} onClick={() => handleUpdateQuantity(product.ProductId, GenerateCode(), "decrement")} className={`w-8 h-8 flex items-center justify-center font-bold rounded transition-colors ${(!product.quantity || product.quantity <= 0) ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "text-gray-600 hover:bg-gray-200 cursor-pointer"}`}> -</button>
+
             <span className="text-sm font-semibold w-8 text-center">{product.quantity || 0}</span>
-            <button onClick={cart == null ? () => handleAddToCart(product.ProductId, 1, LocalSession || GenerateCode()) : ""} className="w-8 h-8 flex items-center justify-center font-bold text-gray-600 hover:bg-gray-200 rounded transition-colors cursor-pointer">+</button>
+            <button onClick={product.quantity || product.quantity >= 0 ? () => handleAddToCart(product.ProductId, 1, GenerateCode()) : handleUpdateQuantity(product.ProductId, GenerateCode(), "increment")} className="w-8 h-8 flex items-center justify-center font-bold text-gray-600 hover:bg-gray-200 rounded transition-colors cursor-pointer">+</button>
           </div>
         </div>
       </div>

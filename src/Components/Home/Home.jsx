@@ -2,167 +2,146 @@ import { useEffect, useState } from "react";
 import AccordionItem from "./AccordionItem.jsx";
 import ProductCard from "./ProductCard.jsx";
 import ReviewCart from "./ReviewCart.jsx";
-import YourIconComponent from "./YourIconComponent.jsx";
+import YourIconComponent from "./YourIconComponent.jsx"; // تأكد من استيراد الأيقونة الخاصة بك
 import axios from "axios";
 import toast from "react-hot-toast";
 
-
-
-
 export default function Home() {
-
-  const LocalSession = localStorage.getItem("SessionId")
-
   const [openIndex, setOpenIndex] = useState(0);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState([]);
+  const [loadingProductId, setLoadingProductId] = useState(null); // للودر الخاص بالمنتج
 
-
-
-
-
-
-
-
-
-
-
-  const handleAddToCart = async (productId, quantity, uniqueId) => {
-
-    const response = await axios.post('https://ahmed-mohamed-home-bundle-builder.vercel.app/api/v1/Cart/AddToCart', {
-      productId,
-      quantity,
-      cartId: uniqueId
-
-
-
-    }).then(() => {
-
-
-
-      const sessionId = localStorage.setItem("SessionId", uniqueId)
-      toast.success("Add SuccessFully")
-      fetchCart(sessionId)
-
-    }).catch((err) => {
-      console.log("==>", err);
-      toast.success(err)
-    })
-
-
-
-
-  }
-
-
-  const fetchCart = async (sessionId) => {
-
-    try {
-
-      const response = await axios.get(`https://ahmed-mohamed-home-bundle-builder.vercel.app/api/v1/Cart/GetCart/${LocalSession}`);
-
-
-
-
-      setCart(response.data.cart);
-
+  // جلب السلة
+  const fetchCart = async () => {
+    const sessionId = localStorage.getItem("SessionId");
+    if (!sessionId) {
       setLoading(false);
-
-    } catch (error) {
-
-      console.error("Error fetching categories:", error);
-
-      setLoading(false);
-
+      return;
     }
-
+    try {
+      const response = await axios.get(`https://ahmed-mohamed-home-bundle-builder.vercel.app/api/v1/Cart/GetCart/${sessionId}`);
+      setCart(response.data.cart);
+    } catch (error) {
+      console.error("Error fetching cart:", error);
+    }
   };
 
+  // إضافة للمنتجات
+  const handleAddToCart = async (productId, quantity, uniqueId) => {
+    try {
+      await axios.post('https://ahmed-mohamed-home-bundle-builder.vercel.app/api/v1/Cart/AddToCart', {
+        productId,
+        quantity,
+        cartId: uniqueId
+      });
+      localStorage.setItem("SessionId", uniqueId);
+      toast.success("Added Successfully");
+      fetchCart();
+    } catch (err) {
+      toast.error("Failed to add to cart");
+    }
+  };
 
-
-
-
+  // تحديث الكمية
+  const handleUpdateQuantity = async (productId, cartId, action) => {
+    setLoadingProductId(productId); // تفعيل اللودر للمنتج
+    try {
+      await axios.put('https://ahmed-mohamed-home-bundle-builder.vercel.app/api/v1/Cart/UpdateProductQuantity', {
+        productId,
+        cartId,
+        action
+      });
+      toast.success("Updated Successfully");
+      fetchCart();
+    } catch (err) {
+      toast.error("Failed to update");
+    } finally {
+      setLoadingProductId(null); // إيقاف اللودر
+    }
+  };
 
   useEffect(() => {
-
-
-
-    const fetchCategories = async () => {
-
+    const fetchData = async () => {
+      setLoading(true);
       try {
-
-        const response = await axios.get('https://ahmed-mohamed-home-bundle-builder.vercel.app/api/v1/categories/GetAllCategoriesWithInfo');
-
-
-
-
-
-        setCategories(response.data.categories);
-
-        setLoading(false);
-
+        const catRes = await axios.get('https://ahmed-mohamed-home-bundle-builder.vercel.app/api/v1/categories/GetAllCategoriesWithInfo');
+        setCategories(catRes.data.categories);
+        await fetchCart();
       } catch (error) {
-
-        console.error("Error fetching categories:", error);
-
+        console.error("Error loading data:", error);
+      } finally {
         setLoading(false);
-
       }
-
     };
-    fetchCategories();
-    fetchCart()
-
-
-
-
+    fetchData();
   }, []);
 
-
-
-
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className="text-center py-20">Loading...</div>;
 
   return (
-    <section className="HomePageSection h-[100vh] ">
-    <div className=" flex flex-col xl:flex-row xl:justify-around xl:w-[95%] xl:m-auto ">
+    <section className="HomePageSection min-h-screen py-8 bg-gray-50">
+      <div className="flex flex-col lg:flex-row justify-center gap-8 w-[95%] xl:w-[90%] mx-auto">
+        
+        {/* الجزء الأيسر: الأكورديون */}
+        <div className="content w-full lg:w-[65%] space-y-4">
+          {categories.map((cat, index) => (
+            <AccordionItem 
+              key={cat._id} 
+              stepNumber={`STEP ${index + 1} OF ${categories.length}`} 
+              title={`Choose your ${cat.Name}`} 
+              icon={<YourIconComponent index={index} />} 
+              selectedCount={cat.selectedProductsCount} 
+              isOpen={openIndex === index} 
+              onToggle={() => setOpenIndex(index === openIndex ? null : index)}
+            >
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-2">
+                {cat.products.map((item) => (
+                  <ProductCard
+                    key={item._id}
+                    handleAddToCart={handleAddToCart}
+                    handleUpdateQuantity={handleUpdateQuantity}
+                    product={{
+                      ProductId: item._id,
+                      name: item.ProductName,
+                      image: item.ImageUrl.secure_url,
+                      description: item.Description,
+                      HasOffer: item.HasOffer,
+                      TotalOffer: item.TotalOffer,   
+                      HasVariants: item.HasVariants,
+                      Variants: item.Variants,
+                      originalPrice: item.BasePrice,
+                      PriceAfterOffer: item.PriceAfterOffer,
+                      quantity: cart?.Products?.find(p => p.productId._id === item._id)?.quantity || 0
+                    }}
+                  />
+                ))}
+              </div>
 
-        <div className="content flex flex-col justify-center xl:justify-start xl:mt-5 xl:w-[65%]">
-        {categories.map((cat, index) => (<AccordionItem key={cat._id} stepNumber={`STEP ${index + 1} OF ${categories.length}`} title={`Choose your ${cat.Name}`} icon={<YourIconComponent index={index} />} selectedCount={cat.selectedProductsCount} isOpen={openIndex === index} onToggle={() => setOpenIndex(index === openIndex ? null : index)} >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-2 lg:grid-cols-3 xl:grid-cols-2">
-            {cat.products.map((item) => (
-              <ProductCard
-                key={item._id}
-                handleAddToCart={handleAddToCart}
-                product={{
-                  ProductId: item._id,
-                  name: item.ProductName,
-                  PriceAfterOffer: item.PriceAfterOffer,
-                  originalPrice: item.BasePrice,
-                  image: item.ImageUrl.secure_url,
-                  discount: item.TotalOffer,
-                  description: item.Description,
-                  colors: item.AvailableColors,
-                  HasVariants: item.HasVariants,
-                  Variants: item.Variants,
-                  HasOffer: item.HasOffer
-                }}
-              />
-            ))}
+           
+              {index < categories.length - 1 && (
+               <div className="flex justify-center">
+                  <button  onClick={() => setOpenIndex(index + 1)}  className="w-75 mx-auto border  border-[#4E2FD2] hover:bg-[#5533e8] text-[#4E2FD2] hover:text-white py-2 rounded-xl font-bold mt-6 transition-colors cursor-pointer" >
+                  Next: Choose your {categories[index + 1].Name}
+                </button>
+               </div>
+              )}
+            </AccordionItem>
+          ))}
+        </div>
+
+        <div className="w-full lg:w-[30%]">
+          <div className="lg:sticky lg:top-5">
+            <ReviewCart 
+              cart={cart} 
+              handleUpdateQuantity={handleUpdateQuantity} 
+              isLoading={loadingProductId} 
+            />
           </div>
-        </AccordionItem>
+        </div>
 
-
-        ))}
       </div>
-
-
-      <div className="lg:col-span-1 xl:w-[30%] xl:mt-5 ">
-        <ReviewCart cart={cart} />
-      </div>
-    </div>
-
     </section>
   );
 }
