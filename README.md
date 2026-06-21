@@ -40,34 +40,33 @@ Prerequisites
 ## Installation
 
 
-1- Clone the repository:
+1- **Clone the repository**:
 
 * git clone https://github.com/AhmdMohamed506k/Ahmed-Mohamed-Home-Bundle-Builder-Full-Stack.git
 cd Ahmed-Mohamed-Home-Bundle-Builder-Full-Stack
     
 
 
-2. **Install dependencies**:
-```bash
+2- **Install dependencies**:
 
 * npm install
 
 
 
-3. **Run the application**:
-```bash
+3- **Run the application**:
+
 * npm start
 
 
 
-📋 Project Structure
+## 📋 Project Structure
 
-    src/components/: Reusable UI components (AccordionItem, ProductCard, ReviewCart).
+   * src/components/: Reusable UI components (AccordionItem, ProductCard, ReviewCart).
 
-    src/pages/: Main application pages.
+   * src/pages/: Main application pages.
 
-    api/: Backend routes and controllers for cart management and product data.
+   * api/: Backend routes and controllers for cart management and product data.
 
-👤 Test ID
+## 👤 Test ID
 
-    Test ID: 41131
+* Test ID: 41131
