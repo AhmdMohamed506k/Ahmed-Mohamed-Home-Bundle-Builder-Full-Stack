@@ -58,6 +58,9 @@ cd Ahmed-Mohamed-Home-Bundle-Builder-Full-Stack
 * npm start
 
 
+## 📚 API Documentation
+* You can view the full API documentation via Postman here:
+[https://documenter.getpostman.com/view/32040669/2sBXwvKUqf]
 
 ## 📋 Project Structure
 
