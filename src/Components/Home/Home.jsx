@@ -82,10 +82,10 @@ export default function Home() {
 
   return (
     <section className="HomePageSection min-h-screen py-8 bg-gray-50">
-      <div className="flex flex-col lg:flex-row justify-center gap-8 w-[95%] xl:w-[90%] mx-auto">
+      <div className="flex flex-col lg:flex-col xl:flex-row justify-center gap-8 w-[95%] xl:w-[90%] mx-auto">
         
-        {/* الجزء الأيسر: الأكورديون */}
-        <div className="content w-full lg:w-[65%] space-y-4">
+      
+        <div className="content w-full lg:w-full space-y-4">
           {categories.map((cat, index) => (
             <AccordionItem 
               key={cat._id} 
@@ -96,7 +96,7 @@ export default function Home() {
               isOpen={openIndex === index} 
               onToggle={() => setOpenIndex(index === openIndex ? null : index)}
             >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 gap-4 p-2">
                 {cat.products.map((item) => (
                   <ProductCard
                     key={item._id}
@@ -131,7 +131,7 @@ export default function Home() {
           ))}
         </div>
 
-        <div className="w-full lg:w-[30%]">
+        <div className="w-full lg:w-full xl:w-[40%]">
           <div className="lg:sticky lg:top-5">
             <ReviewCart 
               cart={cart} 

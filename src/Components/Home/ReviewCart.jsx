@@ -54,7 +54,7 @@ const ReviewCart = ({ cart, handleUpdateQuantity, isLoading }) => {
     return (
         <div className="bg-[#edf4ff] border border-gray-200 rounded-2xl p-6 shadow-sm flex flex-col lg:gap-10 xl:flex-col sticky top-4">
 
-            <div className="space-y-6 mb-8 lg:w-[60%] xl:w-full">
+            <div className="space-y-6 mb-8 lg:w-full xl:w-full">
                 <div className='border-b border-dashed border-gray-400 mb-4'>
                     <h2 className="text-xl font-bold text-gray-900 mb-1">Your security system</h2>
                     <p className="text-gray-500 text-sm mb-6">Review your personalized protection system.</p>

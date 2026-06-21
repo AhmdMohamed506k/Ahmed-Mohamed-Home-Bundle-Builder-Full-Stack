@@ -35,7 +35,7 @@ const ProductCard = ({ product, handleAddToCart, handleUpdateQuantity, cartData 
 
 
   return (
-    <div className="border border-gray-200 rounded-2xl p-6 flex flex-col items-center hover:border-[#4E2FD2] bg-white shadow-sm hover:shadow-lg transition-all duration-300 xl:flex-row xl:w-full xl:h-50  lg:w-80 ">
+    <div className="border border-gray-200 rounded-2xl p-6 flex flex-col items-center hover:border-[#4E2FD2] bg-white shadow-sm hover:shadow-lg transition-all duration-300 xl:flex-row xl:w-full xl:h-50  lg:w-75 ">
 
 
       <div className='w-40'>
