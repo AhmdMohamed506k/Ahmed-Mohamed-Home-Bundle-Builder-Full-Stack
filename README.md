@@ -1,16 +1,73 @@
-# React + Vite
+# Home Bundle Builder - Full-stack Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a professional Home Bundle Builder developed as a coding exercise. It allows users to build a custom security system by selecting various products categorized into steps, providing a seamless user experience from selection to checkout.
+🚀 Features
 
-Currently, two official plugins are available:
+    Step-by-Step Selection: Intuitive accordion interface to guide users through product categories.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+    Dynamic Cart Management: Real-time update of cart items with quantity adjustment.
 
-## React Compiler
+    Pricing Engine: Automatic calculation of total price, including discounts and savings.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+    Performance Optimization: Utilizes a centralized cache architecture for backend efficiency.
 
-## Expanding the ESLint configuration
+    Clean UI/UX: Responsive and minimalist design focusing on user interaction.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+    Loading States: Professional UX indicators during product quantity updates.
+
+## 🛠 Tech Stack
+
+* **Frontend:** React.js, Tailwind CSS, Axios.
+
+* **Backend:**: Node.js, Express.js.
+
+* **Database:**: MongoDB.
+
+* **Optimization:**: Redis (Centralized Cache Architecture).
+
+
+
+## ⚙️ Setup Instructions
+
+* To run this project locally, follow these steps:
+Prerequisites
+
+*  Node.js (v16 or higher recommended)
+*  MongoDB instance
+
+
+
+## Installation
+
+
+1- Clone the repository:
+
+* git clone https://github.com/AhmdMohamed506k/Ahmed-Mohamed-Home-Bundle-Builder-Full-Stack.git
+cd Ahmed-Mohamed-Home-Bundle-Builder-Full-Stack
+    
+
+
+2. **Install dependencies**:
+```bash
+
+* npm install
+
+
+
+3. **Run the application**:
+```bash
+* npm start
+
+
+
+📋 Project Structure
+
+    src/components/: Reusable UI components (AccordionItem, ProductCard, ReviewCart).
+
+    src/pages/: Main application pages.
+
+    api/: Backend routes and controllers for cart management and product data.
+
+👤 Test ID
+
+    Test ID: 41131
