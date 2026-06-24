@@ -26,11 +26,11 @@ const ReviewCart = ({ cart, handleUpdateQuantity, isLoading,HandelSetToCart }) =
           
             const response = await axios.post(`https://ahmed-mohamed-home-bundle-builder.vercel.app/api/v1/Cart/createCheckoutSession`, { cartId: sessionId });
                
-           
-            
+            await localStorage.removeItem("SessionId")
+             
             toast.success("Redirecting to checkout...");
              
-            localStorage.removeItem("SessionId")
+     
          
             window.location.href = response.data.url; 
             console.log("Proceeding to checkout with session:", sessionId);
