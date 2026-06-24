@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import AccordionItem from "./AccordionItem.jsx";
 import ProductCard from "./ProductCard.jsx";
 import ReviewCart from "./ReviewCart.jsx";
-import YourIconComponent from "./YourIconComponent.jsx"; // تأكد من استيراد الأيقونة الخاصة بك
+import YourIconComponent from "./YourIconComponent.jsx";
 import axios from "axios";
 import toast from "react-hot-toast";
 
@@ -11,9 +11,9 @@ export default function Home() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [cart, setCart] = useState([]);
-  const [loadingProductId, setLoadingProductId] = useState(null); // للودر الخاص بالمنتج
+  const [loadingProductId, setLoadingProductId] = useState(null); 
 
-  // جلب السلة
+
   const fetchCart = async () => {
     const sessionId = localStorage.getItem("SessionId");
     if (!sessionId) {
@@ -28,7 +28,7 @@ export default function Home() {
     }
   };
 
-  // إضافة للمنتجات
+
   const handleAddToCart = async (productId, quantity, uniqueId) => {
     try {
       await axios.post('https://ahmed-mohamed-home-bundle-builder.vercel.app/api/v1/Cart/AddToCart', {
@@ -44,9 +44,9 @@ export default function Home() {
     }
   };
 
-  // تحديث الكمية
+
   const handleUpdateQuantity = async (productId, cartId, action) => {
-    setLoadingProductId(productId); // تفعيل اللودر للمنتج
+    setLoadingProductId(productId); 
     try {
       await axios.put('https://ahmed-mohamed-home-bundle-builder.vercel.app/api/v1/Cart/UpdateProductQuantity', {
         productId,
@@ -58,7 +58,7 @@ export default function Home() {
     } catch (err) {
       toast.error("Failed to update");
     } finally {
-      setLoadingProductId(null); // إيقاف اللودر
+      setLoadingProductId(null);
     }
   };
 
@@ -76,6 +76,7 @@ export default function Home() {
       }
     };
     fetchData();
+    fetchCart()
   }, []);
 
   if (loading) return <div className="text-center py-20">Loading...</div>;
@@ -100,6 +101,7 @@ export default function Home() {
                 {cat.products.map((item) => (
                   <ProductCard
                     key={item._id}
+                    HandelSetToCart={setCart}
                     handleAddToCart={handleAddToCart}
                     handleUpdateQuantity={handleUpdateQuantity}
                     product={{

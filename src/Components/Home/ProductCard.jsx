@@ -22,7 +22,7 @@ const ProductCard = ({ product, handleAddToCart, handleUpdateQuantity, cartData 
 
 
 
-  console.log(product);
+
   
 
 

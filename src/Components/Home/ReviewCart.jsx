@@ -3,19 +3,17 @@ import img1 from "../../../public/Price1.png";
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
-const ReviewCart = ({ cart, handleUpdateQuantity, isLoading }) => {
+const ReviewCart = ({ cart, handleUpdateQuantity, isLoading,HandelSetToCart }) => {
 
 
     const LocalSession = localStorage.getItem("SessionId");
     const calc = cart?.SubTotal ? (cart.SubTotal - cart.TotalAfterDiscount).toFixed(2) : "0.00";
   
-
-   console.log(cart.Products.length);
+  
    
+
  
 
-
-    
     const handleCheckout = async () => {
         const sessionId = localStorage.getItem("SessionId");
 
@@ -31,8 +29,10 @@ const ReviewCart = ({ cart, handleUpdateQuantity, isLoading }) => {
            
             
             toast.success("Redirecting to checkout...");
+             
+            localStorage.removeItem("SessionId")
+         
             window.location.href = response.data.url; 
-
             console.log("Proceeding to checkout with session:", sessionId);
         } catch (err) {
             console.error("Checkout error:", err);
@@ -114,7 +114,7 @@ const ReviewCart = ({ cart, handleUpdateQuantity, isLoading }) => {
             <div className="mt-auto pt-4 border-t border-dashed border-gray-400">
 
                
-                <div className={`flex justify-between items-center mb-6 border-b border-dashed  border-gray-400 pb-5 ${cart.Products.length >0 ?"":"hidden" }`}>
+                <div className={`flex justify-between items-center mb-6 border-b border-dashed  border-gray-400 pb-5 ${cart?.Products?.length > 0 || cart.length >0 ?"":"hidden" }`}>
                     <div className='flex  items-center'>
                         <svg width="41" height="41" viewBox="0 0 41 41" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <rect width="41" height="41" rx="5" fill="white" />
@@ -138,7 +138,7 @@ const ReviewCart = ({ cart, handleUpdateQuantity, isLoading }) => {
 
                     <img src={img1} alt="Price Tag" />
                     <div className='flex flex-row items-center'>
-                        <span className={`text-gray-400 line-through text-md ${cart.Products.length == 0 ? "hidden opacity-0":""}`}>${cart?.SubTotal?.toFixed(2)}</span>
+                        <span className={`text-gray-400 line-through text-md ${cart?.Products?.length == 0 ? "hidden opacity-0":""}`}>${cart?.SubTotal?.toFixed(2)}</span>
                         <span className="text-2xl font-extrabold text-[#4E2FD2] ms-2">${cart?.TotalAfterDiscount?.toFixed(2) || "0.00"}</span>
                     </div>
                 </div>
