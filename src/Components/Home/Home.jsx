@@ -76,10 +76,9 @@ export default function Home() {
       }
     };
     fetchData();
-    fetchCart()
   }, []);
 
-  if (loading) return <div className="text-center py-20">Loading...</div>;
+  if (loading) return <div className="text-center py-20 flex justify-center items-center h-[100vh]"><span class="loader "></span></div>;
 
   return (
     <section className="HomePageSection min-h-screen py-8 bg-gray-50">
